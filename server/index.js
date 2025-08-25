@@ -17,8 +17,14 @@ const app = express();
 
 // Middleware
 app.use(cors());
-app.use(clerkMiddleware());
-app.use("/api/users/webhooks", express.raw({ type: "application/json" }));
+// app.use(clerkMiddleware());
+// app.use("/api/users/webhooks", express.raw({ type: "application/json" }));
+app.use(
+  "/api/users/",
+  express.raw({ type: "application/json" }),
+  clerkWebhooks
+);
+
 app.use(express.json()); // to handle JSON payloads
 
 // Connect to DB
