@@ -7,6 +7,8 @@ const cors = require("cors");
 const userRouter = require("./routes/userRoutes");
 const blogRouter = require("./routes/userRoutes");
 
+const { clerkMiddleware } = require("@clerk/express");
+
 // Load env vars
 dotenv.config();
 
@@ -15,6 +17,7 @@ const app = express();
 
 // Middleware
 app.use(cors());
+app.use(clerkMiddleware());
 app.use("/api/users/webhooks", express.raw({ type: "application/json" }));
 app.use(express.json()); // to handle JSON payloads
 
