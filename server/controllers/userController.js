@@ -1,26 +1,24 @@
 const { Webhook } = require("svix");
-const User = require("../models/userModel"); // dhyaan: file ka naam match kare
+const User = require("../models/userModel");
 
-// API controller function to manage Clerk user with database
 const clerkWebhooks = async (req, res) => {
   try {
-    // Create a svix instance with Clerk webhook secret
     const whook = new Webhook(process.env.CLERK_WEBHOOK_SECRET);
 
-    const payload = req.body;
+    const payloadString = req.body.toString(); // raw body as string
     const headers = {
       "svix-id": req.headers["svix-id"],
       "svix-timestamp": req.headers["svix-timestamp"],
       "svix-signature": req.headers["svix-signature"],
     };
+
     console.log("Headers:", headers);
-    console.log("Payload (raw):", req.body.toString());
+    console.log("Raw payload string:", payloadString);
 
-    // Verify the webhook (async)
-    await whook.verify(JSON.stringify(payload), headers);
+    // ✅ verify raw payload
+    const event = whook.verify(payloadString, headers);
 
-    const { data, type } = payload;
-
+    const { data, type } = event;
     console.log("Webhook received:", { type, userId: data?.id });
 
     switch (type) {
@@ -31,7 +29,6 @@ const clerkWebhooks = async (req, res) => {
           email: data.email_addresses[0].email_address,
           image: data.image_url,
         };
-
         await User.create(userData);
         console.log("User created:", userData);
         return res.json({ success: true });
@@ -43,7 +40,6 @@ const clerkWebhooks = async (req, res) => {
           email: data.email_addresses[0].email_address,
           image: data.image_url,
         };
-
         await User.findOneAndUpdate({ clerkId: data.id }, userData, {
           new: true,
         });
@@ -63,10 +59,8 @@ const clerkWebhooks = async (req, res) => {
     }
   } catch (error) {
     console.error("Webhook error:", error);
-    return res.status(500).json({ success: false, message: error.message });
+    return res.status(400).json({ success: false, message: error.message });
   }
 };
 
-module.exports = {
-  clerkWebhooks,
-};
+module.exports = { clerkWebhooks };
