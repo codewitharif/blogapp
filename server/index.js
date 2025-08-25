@@ -15,6 +15,7 @@ const app = express();
 
 // Middleware
 app.use(cors());
+app.use("/api/users/webhooks", express.raw({ type: "application/json" }));
 app.use(express.json()); // to handle JSON payloads
 
 // Connect to DB
