@@ -5,7 +5,7 @@ const cors = require("cors");
 
 // Routes
 const userRouter = require("./routes/userRoutes");
-const blogRouter = require("./routes/userRoutes");
+const blogRouter = require("./routes/blogRoutes");
 
 const { clerkMiddleware } = require("@clerk/express");
 
