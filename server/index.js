@@ -8,6 +8,7 @@ const userRouter = require("./routes/userRoutes");
 const blogRouter = require("./routes/blogRoutes");
 
 const { clerkMiddleware } = require("@clerk/express");
+const { clerkWebhooks } = require("./controllers/userController");
 
 // Load env vars
 dotenv.config();
