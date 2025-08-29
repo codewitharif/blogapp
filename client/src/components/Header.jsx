@@ -67,18 +67,21 @@ const Header = ({
             >
               Home
             </a>
+            {isSignedIn && (
+              <Link
+                to="/create-blog"
+                className="text-gray-600 hover:text-gray-900 transition-colors"
+              >
+                Write
+              </Link>
+            )}
+
             <Link
-              to="/create-blog"
+              to="/blogs"
               className="text-gray-600 hover:text-gray-900 transition-colors"
             >
-              Write
+              Blogs
             </Link>
-            <a
-              href="#"
-              className="text-gray-600 hover:text-gray-900 transition-colors"
-            >
-              Categories
-            </a>
             <a
               href="#"
               className="text-gray-600 hover:text-gray-900 transition-colors"

@@ -6,6 +6,7 @@ const cors = require("cors");
 // Routes
 const userRouter = require("./routes/userRoutes");
 const blogRouter = require("./routes/blogRoutes");
+const categoryRouter = require("./routes/categoryRoutes");
 
 const { clerkMiddleware } = require("@clerk/express");
 const { clerkWebhooks } = require("./controllers/userController");
@@ -18,7 +19,7 @@ const app = express();
 
 // Middleware
 app.use(cors());
-// app.use(clerkMiddleware());
+app.use(clerkMiddleware());
 // app.use("/api/users/webhooks", express.raw({ type: "application/json" }));
 app.use(
   "/api/users/",
@@ -34,6 +35,7 @@ connectDB();
 // Routes
 app.use("/api/users", userRouter);
 app.use("/api/blogs", blogRouter);
+app.use("/api/categories", categoryRouter);
 
 // Health check route
 app.get("/", (req, res) => {

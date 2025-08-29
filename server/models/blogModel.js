@@ -12,9 +12,9 @@ const blogSchema = new mongoose.Schema(
       required: true,
     },
     category: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Category",
       required: true,
-      trim: true,
     },
     image: {
       type: String, // blog thumbnail / cover image
@@ -26,16 +26,28 @@ const blogSchema = new mongoose.Schema(
         trim: true,
       },
     ],
-    likes: {
+    // ✅ CORRECTED: Changed to String array for clerkId
+    likesBy: [
+      {
+        type: String, // Store clerkId as string
+        trim: true,
+      },
+    ],
+    likesCount: {
       type: Number,
       default: 0, // start with 0 likes
     },
     comments: [
       {
+        // ✅ CORRECTED: Changed to String for clerkId
         user: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "User",
+          type: String, // Store clerkId as string
           required: true,
+          trim: true,
+        },
+        username: {
+          type: String, // Store username for display
+          trim: true,
         },
         text: {
           type: String,
@@ -47,10 +59,19 @@ const blogSchema = new mongoose.Schema(
         },
       },
     ],
+    // ✅ CORRECTED: Removed ref since it's a String
     author: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      type: String, // Store clerkId as string
       required: true,
+      trim: true,
+    },
+    authorName: {
+      type: String,
+      required: true,
+    },
+    authorImage: {
+      type: String,
+      required: false,
     },
     minutesToRead: {
       type: Number,

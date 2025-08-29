@@ -9,7 +9,7 @@ const CreateBlogPage = ({ goHome, setPosts, posts }) => {
     <div className="min-h-screen bg-gray-50">
       {/* <Header goHome={goHome} currentView="create" /> */}
 
-      <BackHeader goHome={goHome} currentView="create" />
+      <BackHeader goHome={goHome} currentView="create"/>
       <CreateBlog goHome={goHome} setPosts={setPosts} posts={posts} />
     </div>
   );

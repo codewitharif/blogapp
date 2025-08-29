@@ -2,7 +2,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const BackHeader = ({ goHome }) => {
+const BackHeader = () => {
   return (
     <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-200">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -18,7 +18,6 @@ const BackHeader = ({ goHome }) => {
           <div className="flex items-center space-x-3 sm:space-x-6">
             <Link
               to="/"
-              onClick={goHome}
               className="text-gray-600 hover:text-gray-900 transition-colors flex items-center text-sm sm:text-base"
             >
               <svg

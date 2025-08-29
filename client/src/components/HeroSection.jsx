@@ -1,13 +1,22 @@
 // components/HeroSection/HeroSection.js
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import useBlogStore from "../store/store";
 
-const HeroSection = ({ featuredPost }) => {
-  const navigate = useNavigate();
+const HeroSection = () => {
+  const { featuredPost } = useBlogStore();
 
-  const handleReadMore = () => {
-    navigate(`/blog/${featuredPost.id}`);
-  };
+  if (!featuredPost) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
+        <div className="bg-white rounded-2xl sm:rounded-3xl shadow-lg overflow-hidden">
+          <div className="flex items-center justify-center h-64">
+            <p className="text-gray-500">Loading featured post...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
@@ -21,10 +30,9 @@ const HeroSection = ({ featuredPost }) => {
             />
           </div>
           <div className="p-6 sm:p-8 lg:p-12 md:w-1/2 flex flex-col justify-center">
-            {/* Hero content */}
             <div className="inline-block">
               <span className="px-3 py-1 bg-gray-100 text-gray-700 text-xs sm:text-sm font-medium rounded-full">
-                {featuredPost.category}
+                {featuredPost.category?.categoryName}
               </span>
             </div>
             <h1 className="mt-4 sm:mt-6 text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 leading-tight">
@@ -37,25 +45,36 @@ const HeroSection = ({ featuredPost }) => {
               <div className="flex items-center">
                 <img
                   src={featuredPost.authorImage}
-                  alt={featuredPost.author}
+                  alt={featuredPost.authorName}
                   className="h-12 w-12 sm:h-14 sm:w-14 rounded-full"
                 />
                 <div className="ml-3 sm:ml-4">
                   <p className="text-base sm:text-lg font-medium text-gray-900">
-                    {featuredPost.author}
+                    {featuredPost.authorName}
                   </p>
                   <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 text-gray-500 text-sm">
-                    <span>{featuredPost.date}</span>
+                    <span>
+                      {new Date(featuredPost.createdAt).toLocaleDateString(
+                        "en-US",
+                        {
+                          day: "numeric",
+                          month: "short",
+                          year: "numeric",
+                        }
+                      )}
+                    </span>
                     <span className="hidden sm:inline">•</span>
-                    <span>{featuredPost.readTime}</span>
+                    <span>
+                      {featuredPost.minutesToRead} min read
+                    </span>
                     <span className="hidden sm:inline">•</span>
-                    <span>❤️ {featuredPost.likes}</span>
+                    <span>❤️ {featuredPost.likesCount || 0}</span>
                   </div>
                 </div>
               </div>
             </div>
-            <button
-              onClick={handleReadMore}
+            <Link
+              to={`/blog/${featuredPost._id}`}
               className="mt-6 sm:mt-8 inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 bg-gray-900 text-white rounded-md hover:bg-gray-800 transition-colors text-base sm:text-lg font-medium"
             >
               Read Full Article
@@ -72,7 +91,7 @@ const HeroSection = ({ featuredPost }) => {
                   d="M9 5l7 7-7 7"
                 />
               </svg>
-            </button>
+            </Link>
           </div>
         </div>
       </div>

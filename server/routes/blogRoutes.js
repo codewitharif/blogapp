@@ -5,8 +5,9 @@ const {
   getBlogById,
   updateBlog,
   deleteBlog,
-  likeBlog,
-  commentOnBlog,
+  toggleLike,
+  checkIfLiked,
+  addComment
 } = require("../controllers/blogController");
 
 const authUser = require("../middleware/auth");
@@ -28,10 +29,16 @@ blogRouter.put("/:id", authUser, updateBlog);
 // Delete blog (auth required)
 blogRouter.delete("/:id", authUser, deleteBlog);
 
-// Like a blog (auth required, but only increments likes count)
-blogRouter.post("/:id/like", authUser, likeBlog);
+// Like a blog (auth required)
+// blogRouter.post("/:id/like", authUser, likeBlog);
+
+// // Unlike a blog (auth required)
+// blogRouter.delete("/:id/like", authUser, unlikeBlog);
+
+blogRouter.post("/:id/toggle-like", authUser, toggleLike);
+blogRouter.get("/:id/check-like", authUser, checkIfLiked);
 
 // Add a comment (auth required)
-blogRouter.post("/:id/comment", authUser, commentOnBlog);
+blogRouter.post("/:id/comment", authUser, addComment);
 
 module.exports = blogRouter;

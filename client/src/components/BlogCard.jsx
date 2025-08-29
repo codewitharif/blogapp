@@ -1,18 +1,17 @@
 // components/BlogCard/BlogCard.js
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import useBlogStore from "../store/store";
 
-const BlogCard = ({ post, openPost }) => {
+const BlogCard = ({ post }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    // Use navigate instead of openPost for routing
-    navigate(`/blog/${post.id}`);
+    navigate(`/blog/${post._id}`);
   };
 
   return (
     <div
-      key={post.id}
       onClick={handleClick}
       className="group bg-white rounded-xl sm:rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-500 cursor-pointer hover:scale-105 border border-gray-200"
     >
@@ -24,11 +23,11 @@ const BlogCard = ({ post, openPost }) => {
         />
         <div className="absolute top-3 sm:top-4 left-3 sm:left-4">
           <span className="px-2 sm:px-3 py-1 bg-white/90 backdrop-blur-sm text-gray-700 text-xs font-medium rounded-full">
-            {post.category}
+            {post.category?.categoryName || post.category}
           </span>
         </div>
         <div className="absolute bottom-3 sm:bottom-4 right-3 sm:right-4 bg-black/50 text-white text-xs sm:text-sm px-2 py-1 rounded">
-          {post.readTime}
+          {post.minutesToRead} min read
         </div>
       </div>
       <div className="p-4 sm:p-6">
@@ -42,19 +41,29 @@ const BlogCard = ({ post, openPost }) => {
           <div className="flex items-center">
             <img
               src={post.authorImage}
-              alt={post.author}
+              alt={post.authorName}
               className="h-8 w-8 sm:h-10 sm:w-10 rounded-full"
             />
             <div className="ml-2 sm:ml-3">
               <p className="text-xs sm:text-sm font-medium text-gray-900">
-                {post.author}
+                {post.authorName}
               </p>
-              <p className="text-xs text-gray-500">{post.date}</p>
+              <p className="text-xs text-gray-500">
+                {new Date(post.createdAt).toLocaleDateString("en-US", {
+                  day: "numeric",
+                  month: "short",
+                  year: "numeric",
+                })}
+              </p>
             </div>
           </div>
           <div className="flex items-center space-x-3 text-xs sm:text-sm text-gray-500">
-            <span className="flex items-center">❤️ {post.likes}</span>
-            <span className="flex items-center">💬 {post.comments}</span>
+            <span className="flex items-center">
+              ❤️ {post.likesCount || 0}
+            </span>
+            <span className="flex items-center">
+              💬 {post.comments?.length || 0}
+            </span>
           </div>
         </div>
       </div>

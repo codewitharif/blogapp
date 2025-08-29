@@ -1,7 +1,17 @@
 // components/Footer/Footer.js
-import React from "react";
+import React, { useEffect, useState } from "react";
+import useBlogStore from "../store/store";
+import axios from "axios";
 
 const Footer = () => {
+  const { categories, fetchCategories } = useBlogStore();
+
+  console.log("my categories are ", categories);
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
   return (
     <footer className="bg-white border-t border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">

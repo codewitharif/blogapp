@@ -1,7 +1,6 @@
-// components/CategoryFilter/CategoryFilter.js
 import React from "react";
 
-const CategoryFilter = ({ categories, activeCategory, setActiveCategory }) => {
+const CategoryFilter = ({ activeCategory, setActiveCategory, categories }) => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8 sm:pb-12">
       <div className="flex flex-wrap gap-2 sm:gap-3 justify-center">
