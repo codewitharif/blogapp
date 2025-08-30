@@ -1,7 +1,7 @@
 // components/BlogDetail/BlogDetail.js - Updated version with working share functionality
 import React, { useState, useEffect } from "react";
 import { IoMdHeartEmpty, IoMdHeart } from "react-icons/io";
-import { FaComment } from "react-icons/fa";
+import { FaComment, FaShareAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useUser, useAuth } from "@clerk/clerk-react";
 import useBlogStore from "../store/store";
@@ -289,7 +289,7 @@ const BlogDetail = ({ selectedPost }) => {
                 onClick={handleShare}
                 className="flex items-center space-x-2 text-gray-600 hover:text-green-500 transition-colors"
               >
-                <span className="text-lg sm:text-xl">🔗</span>
+                <span className="text-lg sm:text-xl"><FaShareAlt/></span>
                 <span className="text-sm sm:text-base">Share</span>
               </button>
             </div>
@@ -341,6 +341,7 @@ const BlogDetail = ({ selectedPost }) => {
         onClose={handleCommentsClose}
         initialComments={selectedPost.comments || []}
         onCommentsUpdate={handleCommentsUpdate}
+        authorImage={selectedPost.authorImage}
       />
 
       {/* Share Modal */}

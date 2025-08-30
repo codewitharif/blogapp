@@ -260,35 +260,65 @@ const useBlogStore = create((set, get) => ({
     }
   },
   // Add comment to a blog
-  addComment: async (blogId, text, username, token) => {
-    try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/api/blogs/${blogId}/comment`,
-        {
-          text,
-          username, // Add username to request body
+  // addComment: async (blogId, text, username, token) => {
+  //   try {
+  //     const response = await axios.post(
+  //       `${import.meta.env.VITE_BACKEND_URL}/api/blogs/${blogId}/comment`,
+  //       {
+  //         text,
+  //         username, // Add username to request body
+  //       },
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //           "Content-Type": "application/json",
+  //         },
+  //       }
+  //     );
+
+  //     if (response.data.comments) {
+  //       // Update the blog in store with new comments
+  //       get().updateBlogInStore(blogId, {
+  //         comments: response.data.comments,
+  //       });
+
+  //       return response.data;
+  //     }
+  //   } catch (error) {
+  //     console.error("Error adding comment:", error);
+  //     throw error;
+  //   }
+  // },
+  addComment: async (blogId, text, username, token, userImage) => { // Add userImage parameter
+  try {
+    const response = await axios.post(
+      `${import.meta.env.VITE_BACKEND_URL}/api/blogs/${blogId}/comment`,
+      {
+        text,
+        username,
+        userImage, // Add userImage to request body
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
         },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (response.data.comments) {
-        // Update the blog in store with new comments
-        get().updateBlogInStore(blogId, {
-          comments: response.data.comments,
-        });
-
-        return response.data;
       }
-    } catch (error) {
-      console.error("Error adding comment:", error);
-      throw error;
+    );
+
+    if (response.data.comments) {
+      // Update the blog in store with new comments
+      get().updateBlogInStore(blogId, {
+        comments: response.data.comments,
+      });
+
+      return response.data;
     }
-  },
+  } catch (error) {
+    console.error("Error adding comment:", error);
+    throw error;
+  }
+},
   // store/store.js mein add karo
   // Add this new method in your store
   // addFetchedBlogToStore: (blog) => {

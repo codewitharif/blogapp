@@ -58,7 +58,7 @@ const MoreBlogsPage = () => {
       <BackHeader goHome={goHome} currentView="blogs" />
     
 
-      <div className="max-w-7xl mx-auto mt-28 px-4 sm:px-6 lg:px-8 pb-16 sm:pb-20">
+      <div className="max-w-7xl mx-auto pt-8 px-4 sm:px-6 lg:px-8 pb-16 sm:pb-20">
         <div className="mb-8">
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
             All Blog Posts

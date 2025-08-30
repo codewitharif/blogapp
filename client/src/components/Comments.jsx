@@ -10,6 +10,7 @@ const Comments = ({
   onClose,
   initialComments = [],
   onCommentsUpdate,
+  authorImage,
 }) => {
   const { getToken } = useAuth();
   const { user } = useUser();
@@ -47,12 +48,13 @@ const Comments = ({
         user.emailAddresses?.[0]?.emailAddress?.split("@")[0] ||
         "Anonymous";
 
-      // Use the store method directly with username
+      // Use the store method directly with username and user image
       const response = await addComment(
         blogId,
         newComment.trim(),
         username,
-        token
+        token,
+        user.imageUrl // Pass user's profile image
       );
 
       if (response.comments) {
@@ -119,9 +121,25 @@ const Comments = ({
             ) : (
               comments.map((comment, index) => (
                 <div key={index} className="flex space-x-3">
-                  {/* User Avatar - Using username's first character */}
+                  {/* User Avatar - Using actual profile image or fallback */}
                   <div className="flex-shrink-0">
-                    <div className="w-8 h-8 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full flex items-center justify-center">
+                    {comment.userImage ? (
+                      <img
+                        src={comment.userImage}
+                        alt={comment.username || "User"}
+                        className="w-8 h-8 rounded-full object-cover"
+                        onError={(e) => {
+                          // Fallback to initial avatar if image fails to load
+                          e.target.style.display = 'none';
+                          e.target.nextSibling.style.display = 'flex';
+                        }}
+                      />
+                    ) : null}
+                    <div 
+                      className={`w-8 h-8 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full flex items-center justify-center ${
+                        comment.userImage ? 'hidden' : 'flex'
+                      }`}
+                    >
                       <span className="text-xs font-medium text-white">
                         {(comment.username || comment.user || "A")
                           .charAt(0)
@@ -162,17 +180,39 @@ const Comments = ({
           {/* Add Comment Form */}
           <div className="border-t border-gray-200 p-6">
             <form onSubmit={handleAddComment} className="space-y-3">
-              <textarea
-                value={newComment}
-                onChange={(e) => setNewComment(e.target.value)}
-                placeholder={
-                  user ? "Write a comment..." : "Please login to comment"
-                }
-                disabled={!user || submitting}
-                rows={3}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
-              />
-              <div className="flex items-center justify-between">
+              <div className="flex space-x-3">
+                {/* Current user's avatar */}
+                <div className="flex-shrink-0">
+                  {user?.imageUrl ? (
+                    <img
+                      src={user.imageUrl}
+                      alt={user.firstName || "You"}
+                      className="w-8 h-8 rounded-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-8 h-8 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full flex items-center justify-center">
+                      <span className="text-xs font-medium text-white">
+                        {user ? (user.firstName?.[0] || user.username?.[0] || "U").toUpperCase() : "G"}
+                      </span>
+                    </div>
+                  )}
+                </div>
+                
+                <div className="flex-1">
+                  <textarea
+                    value={newComment}
+                    onChange={(e) => setNewComment(e.target.value)}
+                    placeholder={
+                      user ? "Write a comment..." : "Please login to comment"
+                    }
+                    disabled={!user || submitting}
+                    rows={3}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
+                  />
+                </div>
+              </div>
+              
+              <div className="flex items-center justify-between pl-11">
                 <span className="text-xs text-gray-500">
                   {newComment.length}/500 characters
                 </span>

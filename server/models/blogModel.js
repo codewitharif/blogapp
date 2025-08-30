@@ -49,6 +49,11 @@ const blogSchema = new mongoose.Schema(
           type: String, // Store username for display
           trim: true,
         },
+        userImage: {
+          type: String, // Store user's profile image URL
+          trim: true,
+          default: null, // Optional field
+        },
         text: {
           type: String,
           required: true,

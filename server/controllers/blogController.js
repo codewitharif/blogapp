@@ -205,7 +205,6 @@ exports.toggleLike = async (req, res) => {
   }
 };
 
-
 exports.checkIfLiked = async (req, res) => {
   try {
     const userId = req.clerkId;
@@ -226,7 +225,7 @@ exports.checkIfLiked = async (req, res) => {
 // Updated Controller - addComment function
 exports.addComment = async (req, res) => {
   try {
-    const { text, username } = req.body; // Get both text and username from request
+    const { text, username, userImage } = req.body; // Add userImage to destructuring
     const userId = req.clerkId;
 
     if (!text || text.trim() === "") {
@@ -242,7 +241,8 @@ exports.addComment = async (req, res) => {
 
     blog.comments.push({
       user: userId,
-      username: username.trim(), // Store the username
+      username: username.trim(),
+      userImage: userImage || null, // Store user's profile image (optional)
       text: text.trim(),
     });
 
