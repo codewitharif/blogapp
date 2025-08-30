@@ -41,7 +41,7 @@ const HeroSection = () => {
             <p className="mt-4 sm:mt-6 text-gray-600 text-base sm:text-lg leading-relaxed">
               {featuredPost.excerpt}
             </p>
-            <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row sm:items-center">
+            {/* <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row sm:items-center">
               <div className="flex items-center">
                 <img
                   src={featuredPost.authorImage}
@@ -72,7 +72,51 @@ const HeroSection = () => {
                   </div>
                 </div>
               </div>
+            </div> */}
+
+            <div className="mt-6 sm:mt-8 flex items-center">
+              {/* Author Avatar */}
+              <img
+                src={featuredPost.authorImage}
+                alt={featuredPost.authorName}
+                className="h-12 w-12 sm:h-14 sm:w-14 rounded-full"
+              />
+
+              {/* Author + Meta Info */}
+              <div className="ml-3 sm:ml-4">
+                {/* Author Name */}
+                <p className="text-base sm:text-lg font-medium text-gray-900">
+                  {featuredPost.authorName}
+                </p>
+
+                {/* Meta Info */}
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-gray-500 text-sm">
+                  {/* Date */}
+                  <span className="flex items-center gap-1">
+                    {" "}
+                    {new Date(featuredPost.createdAt).toLocaleDateString(
+                      "en-US",
+                      {
+                        day: "numeric",
+                        month: "short",
+                        year: "numeric",
+                      }
+                    )}
+                  </span>
+
+                  {/* Reading Time */}
+                  <span className="flex items-center gap-1">
+                    ⏱ {featuredPost.minutesToRead} min read
+                  </span>
+
+                  {/* Likes */}
+                  <span className="flex items-center gap-1">
+                    ❤️ {featuredPost.likesCount || 0}
+                  </span>
+                </div>
+              </div>
             </div>
+
             <Link
               to={`/blog/${featuredPost._id}`}
               className="mt-6 sm:mt-8 inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 bg-gray-900 text-white rounded-md hover:bg-gray-800 transition-colors text-base sm:text-lg font-medium"
