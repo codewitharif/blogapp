@@ -106,12 +106,12 @@ const HeroSection = () => {
 
                   {/* Reading Time */}
                   <span className="flex items-center gap-1">
-                    ⏱ {featuredPost.minutesToRead} min read
+                    {featuredPost.minutesToRead} min read
                   </span>
 
                   {/* Likes */}
                   <span className="flex items-center gap-1">
-                    ❤️ {featuredPost.likesCount || 0}
+                    ❤️ {featuredPost.likesCounto || 0}
                   </span>
                 </div>
               </div>
