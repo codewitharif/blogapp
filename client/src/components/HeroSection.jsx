@@ -111,7 +111,7 @@ const HeroSection = () => {
 
                   {/* Likes */}
                   <span className="flex items-center gap-1">
-                    ❤️ {featuredPost.likesCounto || 0}
+                    ❤️ {featuredPost.likesCount || 0}
                   </span>
                 </div>
               </div>
