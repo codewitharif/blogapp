@@ -1,5 +1,6 @@
 // pages/BlogDetailPage.js
 import React, { useState, useEffect, useMemo } from "react";
+import { LuLoader } from "react-icons/lu";
 import { useParams, useNavigate } from "react-router-dom";
 import BlogDetail from "../components/BlogDetail";
 import BackHeader from "../components/BackHeader";
@@ -9,7 +10,7 @@ const BlogDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { blogs, featuredPost, fetchBlogById } = useBlogStore();
-  
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentBlog, setCurrentBlog] = useState(null);
@@ -20,9 +21,12 @@ const BlogDetailPage = () => {
     if (currentBlog && currentBlog._id === id) {
       return currentBlog;
     }
-    
+
     // Then check in store - but add safety checks
-    let foundPost = blogs && blogs.length > 0 ? blogs.find(post => post && post._id === id) : null;
+    let foundPost =
+      blogs && blogs.length > 0
+        ? blogs.find((post) => post && post._id === id)
+        : null;
     if (!foundPost && featuredPost && featuredPost._id === id) {
       foundPost = featuredPost;
     }
@@ -36,7 +40,10 @@ const BlogDetailPage = () => {
         setError(null);
 
         // Check if blog already exists in store with safety checks
-        let foundPost = blogs && blogs.length > 0 ? blogs.find(post => post && post._id === id) : null;
+        let foundPost =
+          blogs && blogs.length > 0
+            ? blogs.find((post) => post && post._id === id)
+            : null;
         if (!foundPost && featuredPost && featuredPost._id === id) {
           foundPost = featuredPost;
         }
@@ -52,7 +59,7 @@ const BlogDetailPage = () => {
             }
           } catch (fetchError) {
             console.error("Fetch error:", fetchError);
-            
+
             // Set specific error messages based on error type
             if (fetchError.message === "Blog not found") {
               setError("Blog post not found");
@@ -84,7 +91,7 @@ const BlogDetailPage = () => {
   // Update currentBlog when store updates
   useEffect(() => {
     if (blogs && blogs.length > 0) {
-      const foundPost = blogs.find(post => post && post._id === id);
+      const foundPost = blogs.find((post) => post && post._id === id);
       if (foundPost) {
         setCurrentBlog(foundPost);
       }
@@ -107,11 +114,15 @@ const BlogDetailPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading...</p>
-        </div>
+      // <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      //   <div className="text-center">
+      //     <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto"></div>
+      //     <p className="mt-4 text-gray-600">Loading...</p>
+      //   </div>
+      // </div>
+      <div className="flex justify-center items-center py-20">
+        <LuLoader className="animate-spin text-4xl text-gray-600" />
+        <span className="ml-3 text-gray-600">Loadingt...</span>
       </div>
     );
   }
