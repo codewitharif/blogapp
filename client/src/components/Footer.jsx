@@ -17,7 +17,7 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">BlogHub</h3>
+            <h3 className="text-2xl font-bold text-gray-900 mb-4">WriteUp</h3>
             <p className="text-gray-600 leading-relaxed">
               Sharing ideas, insights, and inspiration across various topics.
               Join our community of curious minds.
@@ -106,7 +106,7 @@ const Footer = () => {
           </div>
         </div>
         <div className="mt-12 pt-8 border-t border-gray-700 text-center text-gray-400">
-          <p>© 2023 BlogHub. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} WriteUp. All rights reserved.</p>
         </div>
       </div>
     </footer>

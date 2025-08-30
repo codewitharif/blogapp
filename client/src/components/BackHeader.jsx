@@ -12,7 +12,7 @@ const BackHeader = () => {
               to="/"
               className="text-xl sm:text-2xl font-bold text-gray-900 hover:text-gray-700 transition-colors"
             >
-              BlogHub
+              WriteUp
             </Link>
           </div>
           <div className="flex items-center space-x-3 sm:space-x-6">

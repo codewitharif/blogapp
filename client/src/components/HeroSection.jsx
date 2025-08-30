@@ -1,6 +1,8 @@
 // components/HeroSection/HeroSection.js
 import React from "react";
 import { Link } from "react-router-dom";
+import { LuLoader } from "react-icons/lu";
+
 import useBlogStore from "../store/store";
 
 const HeroSection = () => {
@@ -8,12 +10,17 @@ const HeroSection = () => {
 
   if (!featuredPost) {
     return (
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
-        <div className="bg-white rounded-2xl sm:rounded-3xl shadow-lg overflow-hidden">
-          <div className="flex items-center justify-center h-64">
-            <p className="text-gray-500">Loading featured post...</p>
-          </div>
-        </div>
+      // <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
+      //   <div className="bg-white rounded-2xl sm:rounded-3xl shadow-lg overflow-hidden">
+      //     <div className="flex items-center justify-center h-64">
+      //       <p className="text-gray-500">Loading featured post...</p>
+      //     </div>
+      //   </div>
+      // </div>
+
+      <div className="flex justify-center items-center py-20">
+        <LuLoader className="animate-spin text-4xl text-gray-600" />
+        <span className="ml-3 text-gray-600">Loading featured post...</span>
       </div>
     );
   }
