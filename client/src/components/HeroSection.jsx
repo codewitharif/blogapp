@@ -46,7 +46,9 @@ const HeroSection = () => {
               {featuredPost.title}
             </h1>
             <p className="mt-4 sm:mt-6 text-gray-600 text-base sm:text-lg leading-relaxed">
-              {featuredPost.excerpt}
+              {/* {featuredPost.excerpt} */}
+              Bringing you thought-provoking articles to learn, grow, and
+              explore.
             </p>
             {/* <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row sm:items-center">
               <div className="flex items-center">

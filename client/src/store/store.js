@@ -63,29 +63,6 @@ const useBlogStore = create((set, get) => ({
     }
   },
 
-  // Fetch single blog by ID
-  //   fetchBlogById: async (id) => {
-  //     try {
-  //       const { blogs, addFetchedBlogToStore } = get();
-
-  //       const existingBlog = blogs.find((blog) => blog._id === id);
-  //       if (existingBlog) {
-  //         return existingBlog;
-  //       }
-
-  //       const response = await axios.get(
-  //         `${import.meta.env.VITE_BACKEND_URL}/api/blogs/${id}`
-  //       );
-
-  //       const fetchedBlog = response.data.blog;
-  //       addFetchedBlogToStore(fetchedBlog); // Store mein add kar do
-  //       return fetchedBlog;
-  //     } catch (error) {
-  //       console.error("Error fetching blog:", error);
-  //       throw error;
-  //     }
-  //   },
-
   // Update blog in store (for likes, comments, etc.)
   updateBlogInStore: (blogId, updates) => {
     set((state) => ({
@@ -127,33 +104,6 @@ const useBlogStore = create((set, get) => ({
       throw error;
     }
   },
-
-  // Check if user liked a blog
-  //   checkBlogLikeStatus: async (blogId, token) => {
-  //     try {
-  //       if (!token) return { isLiked: false, likesCount: 0 };
-
-  //       const response = await axios.get(
-  //         `${import.meta.env.VITE_BACKEND_URL}/api/blogs/${blogId}/check-like`,
-  //         {
-  //           headers: {
-  //             Authorization: `Bearer ${token}`,
-  //           },
-  //         }
-  //       );
-
-  //       // Update the blog in store with like status
-  //       get().updateBlogInStore(blogId, {
-  //         likesCount: response.data.likesCount,
-  //         isLiked: response.data.isLiked,
-  //       });
-
-  //       return response.data;
-  //     } catch (error) {
-  //       console.error("Error checking like status:", error);
-  //       return { isLiked: false, likesCount: 0 };
-  //     }
-  //   },
 
   checkBlogLikeStatus: async (blogId, token) => {
     try {
@@ -259,207 +209,129 @@ const useBlogStore = create((set, get) => ({
       throw error;
     }
   },
-  // Add comment to a blog
-  // addComment: async (blogId, text, username, token) => {
-  //   try {
-  //     const response = await axios.post(
-  //       `${import.meta.env.VITE_BACKEND_URL}/api/blogs/${blogId}/comment`,
-  //       {
-  //         text,
-  //         username, // Add username to request body
-  //       },
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //           "Content-Type": "application/json",
-  //         },
-  //       }
-  //     );
-
-  //     if (response.data.comments) {
-  //       // Update the blog in store with new comments
-  //       get().updateBlogInStore(blogId, {
-  //         comments: response.data.comments,
-  //       });
-
-  //       return response.data;
-  //     }
-  //   } catch (error) {
-  //     console.error("Error adding comment:", error);
-  //     throw error;
-  //   }
-  // },
-  addComment: async (blogId, text, username, token, userImage) => { // Add userImage parameter
-  try {
-    const response = await axios.post(
-      `${import.meta.env.VITE_BACKEND_URL}/api/blogs/${blogId}/comment`,
-      {
-        text,
-        username,
-        userImage, // Add userImage to request body
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
+  
+  addComment: async (blogId, text, username, token, userImage) => {
+    // Add userImage parameter
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/blogs/${blogId}/comment`,
+        {
+          text,
+          username,
+          userImage, // Add userImage to request body
         },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.data.comments) {
+        // Update the blog in store with new comments
+        get().updateBlogInStore(blogId, {
+          comments: response.data.comments,
+        });
+
+        return response.data;
       }
-    );
-
-    if (response.data.comments) {
-      // Update the blog in store with new comments
-      get().updateBlogInStore(blogId, {
-        comments: response.data.comments,
-      });
-
-      return response.data;
+    } catch (error) {
+      console.error("Error adding comment:", error);
+      throw error;
     }
-  } catch (error) {
-    console.error("Error adding comment:", error);
-    throw error;
-  }
-},
-  // store/store.js mein add karo
-  // Add this new method in your store
-  // addFetchedBlogToStore: (blog) => {
-  //   set((state) => ({
-  //     blogs: state.blogs.some(b => b._id === blog._id)
-  //       ? state.blogs
-  //       : [blog, ...state.blogs]
-  //   }));
-  // },,
-//   addFetchedBlogToStore: (blog) => {
-//     if (!blog || !blog._id) {
-//       console.error("Invalid blog data:", blog);
-//       return;
-//     }
+  },
 
-//     set((state) => ({
-//       blogs: state.blogs.some((b) => b && b._id === blog._id)
-//         ? state.blogs
-//         : [blog, ...state.blogs],
-//     }));
-//   },
-// Add this updated function to your store.js
-addFetchedBlogToStore: (blog) => {
-  // Validate blog data before adding to store
-  if (!blog) {
-    console.error("Cannot add blog: blog is null or undefined");
-    return false;
-  }
-  
-  if (!blog._id) {
-    console.error("Cannot add blog: missing _id property", blog);
-    return false;
-  }
-  
-  // Validate required blog properties
-  const requiredFields = ['title', 'content'];
-  const missingFields = requiredFields.filter(field => !blog[field]);
-  
-  if (missingFields.length > 0) {
-    console.warn("Blog missing some fields:", missingFields, blog);
-    // Still proceed as these might not be critical
-  }
-  
-  console.log("Adding valid blog to store:", blog._id);
-  
-  set((state) => ({
-    blogs: state.blogs.some(b => b && b._id === blog._id) 
-      ? state.blogs 
-      : [blog, ...state.blogs]
-  }));
-  
-  return true;
-},
-//   fetchBlogById: async (id) => {
-//     try {
-//       console.log("i got the id ", id);
-
-//       const { blogs, addFetchedBlogToStore } = get();
-
-//       // First check if blog exists in current blogs array
-//       const existingBlog = blogs.find((blog) => blog._id === id);
-//       if (existingBlog) {
-//         return existingBlog;
-//       }
-
-//       // If not found, fetch from API
-//       const response = await axios.get(
-//         `${import.meta.env.VITE_BACKEND_URL}/api/blogs/${id}`
-//       );
-
-//       const fetchedBlog = response.data.blog;
-
-//       // Add to store so it can be accessed by components
-//       addFetchedBlogToStore(fetchedBlog);
-
-//       return fetchedBlog;
-//     } catch (error) {
-//       console.error("Error fetching blog:", error);
-//       throw error;
-//     }
-//   },
-// Replace your fetchBlogById function in store.js with this:
-// Replace your fetchBlogById function in store.js with this:
-fetchBlogById: async (id) => {
-  try {
-    console.log("Fetching blog with id:", id);
-    
-    if (!id) {
-      throw new Error("Blog ID is required");
+  addFetchedBlogToStore: (blog) => {
+    // Validate blog data before adding to store
+    if (!blog) {
+      console.error("Cannot add blog: blog is null or undefined");
+      return false;
     }
 
-    const { blogs, addFetchedBlogToStore } = get();
-
-    // First check if blog exists in current blogs array
-    const existingBlog = blogs.find((blog) => blog && blog._id === id);
-    if (existingBlog) {
-      console.log("Blog found in store:", existingBlog);
-      return existingBlog;
+    if (!blog._id) {
+      console.error("Cannot add blog: missing _id property", blog);
+      return false;
     }
 
-    // If not found, fetch from API
-    console.log("Fetching from API...");
-    const response = await axios.get(
-      `${import.meta.env.VITE_BACKEND_URL}/api/blogs/${id}`
-    );
+    // Validate required blog properties
+    const requiredFields = ["title", "content"];
+    const missingFields = requiredFields.filter((field) => !blog[field]);
 
-    console.log("API Response:", response.data);
-
-    // Validate API response - blog data is directly in response.data
-    if (!response.data || !response.data._id) {
-      throw new Error("Invalid API response: blog data not found");
+    if (missingFields.length > 0) {
+      console.warn("Blog missing some fields:", missingFields, blog);
+      // Still proceed as these might not be critical
     }
 
-    const fetchedBlog = response.data; // Blog data is directly in response.data, not response.data.blog
-    
-    // Validate fetched blog data
-    if (!fetchedBlog || !fetchedBlog._id) {
-      throw new Error("Invalid blog data received from API");
+    console.log("Adding valid blog to store:", blog._id);
+
+    set((state) => ({
+      blogs: state.blogs.some((b) => b && b._id === blog._id)
+        ? state.blogs
+        : [blog, ...state.blogs],
+    }));
+
+    return true;
+  },
+  
+  fetchBlogById: async (id) => {
+    try {
+      console.log("Fetching blog with id:", id);
+
+      if (!id) {
+        throw new Error("Blog ID is required");
+      }
+
+      const { blogs, addFetchedBlogToStore } = get();
+
+      // First check if blog exists in current blogs array
+      const existingBlog = blogs.find((blog) => blog && blog._id === id);
+      if (existingBlog) {
+        console.log("Blog found in store:", existingBlog);
+        return existingBlog;
+      }
+
+      // If not found, fetch from API
+      console.log("Fetching from API...");
+      const response = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/api/blogs/${id}`
+      );
+
+      console.log("API Response:", response.data);
+
+      // Validate API response - blog data is directly in response.data
+      if (!response.data || !response.data._id) {
+        throw new Error("Invalid API response: blog data not found");
+      }
+
+      const fetchedBlog = response.data; // Blog data is directly in response.data, not response.data.blog
+
+      // Validate fetched blog data
+      if (!fetchedBlog || !fetchedBlog._id) {
+        throw new Error("Invalid blog data received from API");
+      }
+
+      console.log("Valid blog data received:", fetchedBlog);
+
+      // Add to store so it can be accessed by components
+      addFetchedBlogToStore(fetchedBlog);
+
+      return fetchedBlog;
+    } catch (error) {
+      console.error("Error fetching blog:", error);
+
+      // Don't try to add undefined to store on error
+      if (error.response?.status === 404) {
+        throw new Error("Blog not found");
+      } else if (error.response?.status === 500) {
+        throw new Error("Server error occurred");
+      } else if (error.message.includes("Network Error")) {
+        throw new Error("Network connection failed");
+      } else {
+        throw new Error(error.message || "Failed to fetch blog");
+      }
     }
-    
-    console.log("Valid blog data received:", fetchedBlog);
-    
-    // Add to store so it can be accessed by components
-    addFetchedBlogToStore(fetchedBlog);
-    
-    return fetchedBlog;
-  } catch (error) {
-    console.error("Error fetching blog:", error);
-    
-    // Don't try to add undefined to store on error
-    if (error.response?.status === 404) {
-      throw new Error("Blog not found");
-    } else if (error.response?.status === 500) {
-      throw new Error("Server error occurred");
-    } else if (error.message.includes("Network Error")) {
-      throw new Error("Network connection failed");
-    } else {
-      throw new Error(error.message || "Failed to fetch blog");
-    }
-  }
-},
+  },
 }));
 
 export default useBlogStore;

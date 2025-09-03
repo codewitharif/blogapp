@@ -122,7 +122,7 @@ const BlogDetailPage = () => {
       // </div>
       <div className="flex justify-center items-center py-20">
         <LuLoader className="animate-spin text-4xl text-gray-600" />
-        <span className="ml-3 text-gray-600">Loadingt...</span>
+        <span className="ml-3 text-gray-600">Loading...</span>
       </div>
     );
   }
